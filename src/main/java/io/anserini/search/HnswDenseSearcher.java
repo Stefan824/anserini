@@ -16,11 +16,21 @@
 
 package io.anserini.search;
 
-import ai.onnxruntime.OrtException;
-import io.anserini.encoder.dense.DenseEncoder;
-import io.anserini.index.Constants;
-import io.anserini.search.query.VectorQueryGenerator;
-import io.anserini.util.PrebuiltIndexHandler;
+import java.io.Closeable;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.logging.log4j.LogManager;
@@ -35,20 +45,11 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 import org.kohsuke.args4j.Option;
 
-import javax.annotation.Nullable;
-import java.io.Closeable;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import ai.onnxruntime.OrtException;
+import io.anserini.encoder.dense.DenseEncoder;
+import io.anserini.index.Constants;
+import io.anserini.search.query.VectorQueryGenerator;
+import io.anserini.util.PrebuiltIndexHandler;
 
 public class HnswDenseSearcher<K extends Comparable<K>> extends BaseSearcher<K> implements Closeable {
   // These are the default tie-breaking rules for documents that end up with the same score with respect to a query.

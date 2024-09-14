@@ -1,7 +1,9 @@
 package io.anserini.fusion;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 import org.kohsuke.args4j.CmdLineException;
@@ -35,8 +37,7 @@ public class FuseTrecRunsTest {
     fuseTrecRuns.run();
 
     // Assert the existence of the output file
-    // assertTrue("Output file should exist", Paths.get("runs/testsrc/test/resources/fused_output.txt").toFile().exists());
+    assertTrue("Output file should exist", Paths.get("runs/testsrc/test/resources/fused_output.txt").toFile().exists());
 
-    // Further assertions on the output can be made by reading and validating the contents.
   }
 }
